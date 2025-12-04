@@ -2,10 +2,7 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import Icon from "@/components/ui/icon";
 import { toast } from "sonner";
 
 interface OrderModalProps {
@@ -16,162 +13,118 @@ interface OrderModalProps {
 
 const OrderModal = ({ open, onOpenChange, type = "calculator" }: OrderModalProps) => {
   const [formData, setFormData] = useState({
-    name: "",
-    phone: "",
-    email: "",
-    cargoType: "",
+    cityFrom: "",
+    cityTo: "",
     weight: "",
-    route: "",
+    phone: "",
+    name: "",
     comment: ""
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!formData.name || !formData.phone) {
-      toast.error("Заполните обязательные поля");
+    if (!formData.cityFrom || !formData.cityTo || !formData.weight || !formData.phone) {
+      toast.error("Заполните все обязательные поля");
       return;
     }
 
-    toast.success("Заявка отправлена! Мы свяжемся с вами в ближайшее время");
+    toast.success("Заявка отправлена! Мы перезвоним вам в течение 15 минут");
     onOpenChange(false);
     
     setFormData({
-      name: "",
-      phone: "",
-      email: "",
-      cargoType: "",
+      cityFrom: "",
+      cityTo: "",
       weight: "",
-      route: "",
+      phone: "",
+      name: "",
       comment: ""
     });
   };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[550px] max-h-[90vh] overflow-y-auto">
-        <DialogHeader>
-          <DialogTitle className="text-2xl flex items-center gap-2">
-            <Icon name={type === "calculator" ? "Calculator" : "FileText"} size={24} className="text-primary" />
-            {type === "calculator" ? "Заявка на расчет стоимости" : "Запрос документов"}
-          </DialogTitle>
-          <DialogDescription>
-            {type === "calculator" 
-              ? "Заполните форму и мы рассчитаем точную стоимость доставки вашего груза"
-              : "Укажите ваши данные и мы подготовим необходимые документы"}
-          </DialogDescription>
-        </DialogHeader>
-        
-        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-          <div className="space-y-2">
-            <Label htmlFor="name" className="flex items-center gap-1">
-              Ваше имя <span className="text-destructive">*</span>
-            </Label>
+      <DialogContent className="sm:max-w-[480px] p-0">
+        <div className="bg-white rounded-lg">
+          <DialogHeader className="p-6 pb-4 text-center">
+            <DialogTitle className="text-2xl font-bold text-center">
+              Рассчитать стоимость доставки
+            </DialogTitle>
+            <DialogDescription className="text-center text-base mt-2">
+              Опишите вашу задачу и мы перезвоним вам в течение <strong>15 минут</strong>
+            </DialogDescription>
+          </DialogHeader>
+          
+          <form onSubmit={handleSubmit} className="px-6 pb-6 space-y-3">
             <Input
-              id="name"
-              placeholder="Введите ваше имя"
-              value={formData.name}
-              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              placeholder="Страна и Город погрузки"
+              value={formData.cityFrom}
+              onChange={(e) => setFormData({ ...formData, cityFrom: e.target.value })}
               required
+              className="h-12 bg-muted/50 border-0"
             />
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="phone" className="flex items-center gap-1">
-              Телефон <span className="text-destructive">*</span>
-            </Label>
             <Input
-              id="phone"
+              placeholder="Страна и Город доставки"
+              value={formData.cityTo}
+              onChange={(e) => setFormData({ ...formData, cityTo: e.target.value })}
+              required
+              className="h-12 bg-muted/50 border-0"
+            />
+
+            <div className="flex gap-2">
+              <Input
+                type="number"
+                placeholder="Объем, м³"
+                className="h-12 bg-muted/50 border-0 flex-1"
+              />
+              <Input
+                type="number"
+                placeholder="кг"
+                value={formData.weight}
+                onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
+                required
+                className="h-12 bg-muted/50 border-0 w-20"
+              />
+            </div>
+
+            <Input
               type="tel"
-              placeholder="+7 (___) ___-__-__"
+              placeholder="Номер телефона *"
               value={formData.phone}
               onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
               required
+              className="h-12 bg-muted/50 border-0"
             />
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
             <Input
-              id="email"
-              type="email"
-              placeholder="example@mail.com"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+              placeholder="Имя"
+              value={formData.name}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+              className="h-12 bg-muted/50 border-0"
             />
-          </div>
 
-          {type === "calculator" && (
-            <>
-              <div className="space-y-2">
-                <Label htmlFor="cargo-type-modal">Тип перевозки</Label>
-                <Select value={formData.cargoType} onValueChange={(value) => setFormData({ ...formData, cargoType: value })}>
-                  <SelectTrigger id="cargo-type-modal">
-                    <SelectValue placeholder="Выберите тип" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="auto">Автомобильная</SelectItem>
-                    <SelectItem value="train">Железнодорожная</SelectItem>
-                    <SelectItem value="air">Авиа</SelectItem>
-                    <SelectItem value="container">Контейнер</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+            <div className="text-xs text-muted-foreground">
+              Наименование или ИНН вашей компании или ИП (Работаем с юр.лицами)
+            </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="weight">Вес груза (кг)</Label>
-                <Input
-                  id="weight"
-                  type="number"
-                  placeholder="Введите вес"
-                  value={formData.weight}
-                  onChange={(e) => setFormData({ ...formData, weight: e.target.value })}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="route">Маршрут</Label>
-                <Select value={formData.route} onValueChange={(value) => setFormData({ ...formData, route: value })}>
-                  <SelectTrigger id="route">
-                    <SelectValue placeholder="Выберите маршрут" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="urumqi-almaty">Урумчи → Алматы</SelectItem>
-                    <SelectItem value="guangzhou-astana">Гуанчжоу → Астана</SelectItem>
-                    <SelectItem value="yiwu-almaty">Иу → Алматы</SelectItem>
-                    <SelectItem value="beijing-karaganda">Пекин → Караганда</SelectItem>
-                    <SelectItem value="other">Другой маршрут</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </>
-          )}
-
-          <div className="space-y-2">
-            <Label htmlFor="comment">Комментарий</Label>
             <Textarea
-              id="comment"
-              placeholder="Укажите дополнительную информацию о грузе или особые пожелания"
+              placeholder="Можете записать ваш запрос подробнее"
               value={formData.comment}
               onChange={(e) => setFormData({ ...formData, comment: e.target.value })}
-              rows={3}
+              rows={4}
+              className="bg-muted/50 border-0 resize-none"
             />
-          </div>
 
-          <div className="flex gap-3 pt-4">
-            <Button type="submit" className="flex-1" size="lg">
-              <Icon name="Send" size={18} className="mr-2" />
-              Отправить заявку
+            <Button 
+              type="submit" 
+              className="w-full h-12 text-base font-semibold bg-primary hover:bg-primary/90"
+              size="lg"
+            >
+              Обсудить задачу
             </Button>
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)} size="lg">
-              Отмена
-            </Button>
-          </div>
-
-          <div className="text-xs text-muted-foreground text-center pt-2">
-            Нажимая кнопку "Отправить заявку", вы соглашаетесь с обработкой персональных данных
-          </div>
-        </form>
+          </form>
+        </div>
       </DialogContent>
     </Dialog>
   );
