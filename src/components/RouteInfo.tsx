@@ -2,39 +2,11 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Icon from "@/components/ui/icon";
 import { useState } from "react";
+import { Link } from "react-router-dom";
+import { routesData } from "@/data/routes";
 
 const RouteInfo = () => {
   const [isExpanded, setIsExpanded] = useState(false);
-
-  const routes = [
-    {
-      title: "Автоперевозки и доставка грузов из России в Иран",
-      image: "https://cdn.poehali.dev/files/ced35e53-a2a6-4574-b55d-0e05afafcab2.png",
-      description: "Основной автокоридор Россия–Иран идет через Азербайджан по западной ветке МТК «Север–Юг» (Самур-Ялан-Казмаляр → Азербайджан → Астара → Иран).",
-      timing: "Типовой срок фуры 8-12 дней, а по заявкам операторов Тегеран–Санкт-Петербург проходит за 10-12 дней.",
-      pricing: "По ставкам: полная фура из Москвы в города Ирана встречается от 4300-5800 USD в зависимости от направления и типа кузова.",
-      routeTitle: "Маршрут",
-      routeDetails: "Базовый путь для автоперевозок: Россия (ЦФО/ЮФО) → Ростов-на-Дону → Махачкала → КПП Самур (Азербайджан) – Ялан-Казмаляр (РФ) → трасса по Азербайджану → КПП Астара → Иран (Решт/Тегеран/Тебриз/Исфахан)."
-    },
-    {
-      title: "Железнодорожные перевозки Китай — Казахстан",
-      image: "https://images.unsplash.com/photo-1474487548417-781cb71495f3?w=800&q=80",
-      description: "Основной железнодорожный коридор проходит через пограничные переходы Достык-Алашанькоу и Алтынколь-Хоргос, связывая промышленные центры Китая с Казахстаном.",
-      timing: "Стандартное время доставки контейнера из Гуанчжоу до Алматы составляет 12-15 дней.",
-      pricing: "Стоимость доставки 40-футового контейнера варьируется от $2800 до $4500 в зависимости от маршрута и типа груза.",
-      routeTitle: "Маршрут",
-      routeDetails: "Основной путь: Гуанчжоу/Иу → Урумчи → КПП Алашанькоу/Хоргос → Достык/Алтынколь (Казахстан) → Алматы/Астана/Караганда."
-    },
-    {
-      title: "Контейнерные перевозки через Каспийское море",
-      image: "https://images.unsplash.com/photo-1605745341075-c6b0b5d6d964?w=800&q=80",
-      description: "Транскаспийский международный транспортный маршрут (ТМТМ) соединяет Китай, Центральную Азию и Европу через паромные переправы Каспийского моря.",
-      timing: "Полное время доставки от Китая до Европы через Каспий составляет 18-22 дня, что быстрее морского маршрута через Суэц.",
-      pricing: "Стоимость перевозки 40-футового контейнера от Актау до Баку начинается от $1200.",
-      routeTitle: "Маршрут",
-      routeDetails: "Основные направления: Китай → Казахстан (Достык) → Актау (порт) ⛴ паром → Баку (Азербайджан) → Грузия → Турция/Европа."
-    }
-  ];
 
   return (
     <section className="py-16 bg-background">
@@ -42,7 +14,7 @@ const RouteInfo = () => {
         <h2 className="text-4xl font-bold text-center mb-12">Популярные направления</h2>
         
         <div className="space-y-8 max-w-6xl mx-auto">
-          {routes.map((route, index) => (
+          {routesData.map((route, index) => (
             <Card key={index} className="overflow-hidden hover:shadow-xl transition-shadow">
               <div className="grid lg:grid-cols-2 gap-0">
                 <div className="relative h-64 lg:h-auto">
@@ -77,10 +49,12 @@ const RouteInfo = () => {
                     </div>
                   </div>
                   
-                  <Button className="w-full mt-6 bg-[#4DB8AC] hover:bg-[#3da598] text-lg h-12">
-                    Заказать расчет
-                    <Icon name="ArrowRight" size={20} className="ml-2" />
-                  </Button>
+                  <Link to={`/route/${route.slug}`} className="w-full">
+                    <Button className="w-full mt-6 bg-[#4DB8AC] hover:bg-[#3da598] text-lg h-12">
+                      Подробнее о маршруте
+                      <Icon name="ArrowRight" size={20} className="ml-2" />
+                    </Button>
+                  </Link>
                 </div>
               </div>
             </Card>
