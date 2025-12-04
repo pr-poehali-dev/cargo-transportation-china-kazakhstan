@@ -1,7 +1,7 @@
 import { useParams, Navigate } from "react-router-dom";
-import { useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
@@ -12,26 +12,26 @@ const ServicePage = () => {
   const { slug } = useParams<{ slug: string }>();
   const pageData = slug ? getServicePageBySlug(slug) : null;
 
-  useEffect(() => {
-    if (pageData) {
-      document.title = pageData.metaTitle;
-      
-      let metaDesc = document.querySelector('meta[name="description"]');
-      if (!metaDesc) {
-        metaDesc = document.createElement('meta');
-        metaDesc.setAttribute('name', 'description');
-        document.head.appendChild(metaDesc);
-      }
-      metaDesc.setAttribute('content', pageData.metaDescription);
-    }
-  }, [pageData]);
-
   if (!pageData) {
     return <Navigate to="/" replace />;
   }
 
+  // Генерируем keywords из контента
+  const keywords = [
+    pageData.h1.toLowerCase(),
+    ...pageData.advantages.slice(0, 3).map(a => a.toLowerCase()),
+    "грузоперевозки", "логистика", "доставка грузов"
+  ].join(", ");
+
   return (
     <div className="min-h-screen bg-background">
+      <SEO 
+        title={pageData.metaTitle}
+        description={pageData.metaDescription}
+        keywords={keywords}
+        ogImage={pageData.heroImage}
+        canonicalUrl={`https://chinakaz.kz/${pageData.slug}`}
+      />
       <Header />
       
       {/* Hero секция */}
