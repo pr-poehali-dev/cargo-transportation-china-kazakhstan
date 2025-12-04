@@ -68,28 +68,32 @@ const Header = () => {
     if (hasSubmenu) {
       return (
         <div key={item.label} className={isMobile ? "" : "relative group"}>
-          <button
-            onClick={() => isMobile && toggleMenu(item.label)}
-            className={`flex items-center gap-2 w-full px-3 py-2 rounded-lg transition-colors ${
-              isMobile
-                ? "hover:bg-white/10 text-left"
-                : "hover:text-secondary"
-            } ${openMenus[item.label] ? "bg-white/10" : ""}`}
-          >
-            {item.icon && <Icon name={item.icon} size={18} />}
-            <span>{item.label}</span>
-            <Icon
-              name="ChevronDown"
-              size={16}
-              className={`ml-auto transition-transform ${
-                openMenus[item.label] ? "rotate-180" : ""
-              }`}
-            />
-          </button>
+          {isMobile ? (
+            <button
+              onClick={() => toggleMenu(item.label)}
+              className={`flex items-center gap-2 w-full px-3 py-2 rounded-lg transition-colors hover:bg-white/10 text-left ${openMenus[item.label] ? "bg-white/10" : ""}`}
+            >
+              {item.icon && <Icon name={item.icon} size={18} />}
+              <span>{item.label}</span>
+              <Icon
+                name="ChevronDown"
+                size={16}
+                className={`ml-auto transition-transform ${
+                  openMenus[item.label] ? "rotate-180" : ""
+                }`}
+              />
+            </button>
+          ) : (
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg transition-colors hover:text-secondary cursor-pointer">
+              {item.icon && <Icon name={item.icon} size={18} />}
+              <span>{item.label}</span>
+              <Icon name="ChevronDown" size={16} className="transition-transform group-hover:rotate-180" />
+            </div>
+          )}
 
           {/* Desktop submenu */}
           {!isMobile && (
-            <div className="absolute left-0 mt-2 w-56 bg-white text-foreground rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 overflow-hidden">
+            <div className="absolute left-0 mt-2 w-56 bg-white text-foreground rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 overflow-hidden z-50">
               {item.submenu!.map((subitem) => (
                 <a
                   key={subitem.label}
