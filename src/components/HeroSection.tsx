@@ -1,10 +1,19 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import Icon from "@/components/ui/icon";
 import { Separator } from "@/components/ui/separator";
+import OrderModal from "@/components/OrderModal";
 
 const HeroSection = () => {
+  const [isOrderModalOpen, setIsOrderModalOpen] = useState(false);
+  const [modalType, setModalType] = useState<"calculator" | "documents">("calculator");
+
+  const openOrderModal = (type: "calculator" | "documents") => {
+    setModalType(type);
+    setIsOrderModalOpen(true);
+  };
   const services = [
     {
       icon: "Truck",
@@ -103,11 +112,14 @@ const HeroSection = () => {
               Надежная доставка грузов с полным сопровождением и контролем на каждом этапе
             </p>
             <div className="flex flex-wrap gap-4 animate-fade-in-up">
-              <Button size="lg" variant="secondary" className="text-lg">
+              <Button size="lg" variant="secondary" className="text-lg" onClick={() => openOrderModal("calculator")}>
                 <Icon name="Calculator" size={20} className="mr-2" />
                 Рассчитать стоимость
               </Button>
-              <Button size="lg" variant="outline" className="text-lg bg-white/10 backdrop-blur-sm border-white text-white hover:bg-white hover:text-primary">Опишите вашу задачу</Button>
+              <Button size="lg" variant="outline" className="text-lg bg-white/10 backdrop-blur-sm border-white text-white hover:bg-white hover:text-primary" onClick={() => openOrderModal("documents")}>
+                <Icon name="FileText" size={20} className="mr-2" />
+                Запросить документы
+              </Button>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
               {[
@@ -151,7 +163,7 @@ const HeroSection = () => {
                     </div>
                     <div className="font-semibold text-primary">{service.price}</div>
                   </div>
-                  <Button className="w-full mt-4" variant="outline">
+                  <Button className="w-full mt-4" variant="outline" onClick={() => openOrderModal("calculator")}>
                     Заказать
                   </Button>
                 </CardContent>
@@ -344,6 +356,12 @@ const HeroSection = () => {
           </div>
         </div>
       </section>
+
+      <OrderModal 
+        open={isOrderModalOpen} 
+        onOpenChange={setIsOrderModalOpen}
+        type={modalType}
+      />
     </>
   );
 };
