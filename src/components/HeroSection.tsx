@@ -107,10 +107,7 @@ const HeroSection = () => {
                 <Icon name="Calculator" size={20} className="mr-2" />
                 Рассчитать стоимость
               </Button>
-              <Button size="lg" variant="outline" className="text-lg bg-white/10 backdrop-blur-sm border-white text-white hover:bg-white hover:text-primary">
-                <Icon name="FileText" size={20} className="mr-2" />
-                Запросить документы
-              </Button>
+              <Button size="lg" variant="outline" className="text-lg bg-white/10 backdrop-blur-sm border-white text-white hover:bg-white hover:text-primary">Опишите вашу задачу</Button>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
               {[
